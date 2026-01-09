@@ -37,14 +37,3 @@ NotepadAutomation/
     uv run python bot.py
     ```
     *(Make sure your Desktop is visible!)*
-
-## 📸 Screenshots
-
-**Top-Left**
-![Top Left](screenshots/top_left.png)
-
-**Center**
-![Center](screenshots/center.png)
-
-**Bottom-Right**
-![Bottom Right](screenshots/bottom_right.png)
