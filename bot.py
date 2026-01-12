@@ -37,17 +37,29 @@ class Bot(DesktopBot):
             self.wait(1000)
 
     def get_data(self):
+        # --- COLLEAGUE'S CODE BLOCK (Adapted) ---
         try:
-            res = requests.get('https://jsonplaceholder.typicode.com/posts', verify=False, timeout=5)
-            if res.status_code == 200:
-                print("[INFO] API Connected!")
-                return res.json()[:10]
-        except:
-            print("[WARN] Internet failed. Using local file.")
+            # I used their exact request line (removed verify=False since they don't use it)
+            response = requests.get('https://jsonplaceholder.typicode.com/posts', timeout=10)
+            response.raise_for_status()
+            
+            print("[INFO] API Connected successfully!")
+            # We must add [:10] because the API returns 100 posts, but you only want 10
+            return response.json()[:10]
+            
+        except Exception as e:
+            # If it fails, we print their error message
+            print(f"[WARN] Error fetching posts: {e}")
+        # ----------------------------------------
+
+        # --- YOUR SAFETY NET (Keep this!) ---
+        print("[WARN] Switching to local backup file.")
         
-        # Fallback to local file
+        # If the API above failed, we load from the file on your computer
         if os.path.exists("resources/posts.json"):
-            with open("resources/posts.json", 'r', encoding='utf-8') as f: return json.load(f)[:10]
+            with open("resources/posts.json", 'r', encoding='utf-8') as f:
+                return json.load(f)[:10]
+        
         return []
 
     def open_notepad(self):
@@ -84,7 +96,6 @@ class Bot(DesktopBot):
         
         # 4. Handle "Confirm Save As" (Silent)
         if self.find("confirm_save", matching=0.8, waiting_time=1000):
-            # I removed the print statement here!
             
             # Press LEFT to select "Yes"
             k.press(Key.left); k.release(Key.left)
